@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from projects.models import Project, Bids
+from projects.models import Project, Bid
 
 admin.site.register(Project)
-admin.site.register(Bids)
+admin.site.register(Bid)

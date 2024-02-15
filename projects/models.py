@@ -3,6 +3,9 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from cloudinary.models import CloudinaryField
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from django.utils.text import slugify
 
 from users.abstracts import TimeStampedModel, UniversalIdModel
 
@@ -14,15 +17,13 @@ class Project(UniversalIdModel, TimeStampedModel):
     clients create projects
     """
 
-    name = models.CharField(min_length=1)
-    PROJECT_TIMELINE = (
+    name = models.CharField(max_length=1000)
+    PROJECT_TYPE = (
         ("FT", "Full Time"),
         ("PT", "Part Time"),
         ("CT", "Contract"),
     )
-    project_timeline = models.CharField(
-        max_length=2, choices=PROJECT_TIMELINE, default="FT"
-    )
+    project_type = models.CharField(max_length=2, choices=PROJECT_TYPE, default="FT")
     PROJECT_CATEGORY = (
         ("WB", "Web Development"),
         ("DB", "Database"),
@@ -43,6 +44,7 @@ class Project(UniversalIdModel, TimeStampedModel):
     max_price = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True
     )
+    slug = models.SlugField(max_length=400, unique=True, blank=True, null=True)
 
     @property
     def price_range(self):
@@ -63,6 +65,12 @@ class Project(UniversalIdModel, TimeStampedModel):
         return self.name
 
 
+@receiver(pre_save, sender=Project)
+def slug_pre_save(sender, instance, **kwargs) -> None:
+    if instance.slug is None or instance.slug == "":
+        instance.slug = slugify(f"{instance.id}-{instance.name}")
+
+
 class Bid(UniversalIdModel, TimeStampedModel):
     """
     The model for developers to place bids on projects posted by clients
@@ -71,6 +79,7 @@ class Bid(UniversalIdModel, TimeStampedModel):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="bids")
     proposal = models.TextField()
     developer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bids")
+    file = CloudinaryField("proposal", null=True, blank=True)
 
     BID_STATUS = (
         ("P", "Pending"),
@@ -79,6 +88,7 @@ class Bid(UniversalIdModel, TimeStampedModel):
     )
 
     status = models.CharField(max_length=1, choices=BID_STATUS, default="P")
+    slug = models.SlugField(max_length=400, unique=True, blank=True, null=True)
 
     def clean(self):
         super().clean()
@@ -96,3 +106,11 @@ class Bid(UniversalIdModel, TimeStampedModel):
 
     def __str__(self) -> str:
         return self.project.name
+
+
+@receiver(pre_save, sender=Bid)
+def slug_pre_save(sender, instance, **kwargs) -> None:
+    if instance.slug is None or instance.slug == "":
+        instance.slug = slugify(
+            f"{instance.id}-{instance.developer.username}-{instance.project.name}"
+        )
