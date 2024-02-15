@@ -10,7 +10,7 @@ from projects.views import (
 
 urlpatterns = [
     path("projects/", ProjectListCreateView.as_view(), name="project-list-create"),
-    path("projects/<slug:slug>/", ProjectDetailView.as_view(), name="project-detail"),
+    path("projects/<str:slug>/", ProjectDetailView.as_view(), name="project-detail"),
     path("bids/", BidListCreateView.as_view(), name="bid-list-create"),
-    path("bids/<slug:slug>/", BidDetailView.as_view(), name="bid-detail"),
+    path("bids/<str:slug>/", BidDetailView.as_view(), name="bid-detail"),
 ]
