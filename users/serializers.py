@@ -128,7 +128,7 @@ class DeveloperProfileSerializer(serializers.ModelSerializer):
 
     developer = serializers.CharField(read_only=True, source="developer.username")
     resume = serializers.FileField(use_url=True, required=False)
-    status = serializers.CharField(min_length=1, allow_blank=True, required=False)
+    status = serializers.CharField(min_length=2, allow_blank=True, required=False)
     skills = serializers.CharField(min_length=1, allow_blank=True, required=False)
 
     class Meta:
