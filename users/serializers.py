@@ -46,6 +46,7 @@ class UserSerializer(serializers.ModelSerializer):
             validate_password_lowercase,
         ],
     )
+    image = serializers.FileField(use_url=True, required=False)
 
     class Meta:
         model = User
