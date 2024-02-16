@@ -2,6 +2,7 @@ from rest_framework import generics, status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from django.http import JsonResponse
 
 from projects.models import Project, Bid
 from projects.serializers import ProjectSerializer, BidSerializer
@@ -69,3 +70,23 @@ class BidDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Bid.objects.filter(developer=self.request.user)
+
+
+def project_category_choices(request):
+    choices = Project.PROJECT_CATEGORY
+    return JsonResponse(choices, safe=False)
+
+
+def project_type_choices(request):
+    choices = Project.PROJECT_TYPE
+    return JsonResponse(choices, safe=False)
+
+
+def project_availability_choices(request):
+    choices = Project.PROJECT_STATUS
+    return JsonResponse(choices, safe=False)
+
+
+def project_progress_choices(request):
+    choices = Project.PROJECT_PROGRESS
+    return JsonResponse(choices, safe=False)
