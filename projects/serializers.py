@@ -15,10 +15,8 @@ class ProjectSerializer(serializers.ModelSerializer):
     description = serializers.CharField(min_length=1)
     project_category = serializers.CharField(min_length=2)
     project_type = serializers.CharField(min_length=2)
-    project_duration = serializers.CharField(
-        min_length=2, allow_blank=True, required=False
-    )
-    project_availability = serializers.CharField(min_length=1)
+    project_duration = serializers.CharField(min_length=2)
+    project_progress = serializers.CharField(min_length=1)
     project_status = serializers.CharField(min_length=1)
     file = serializers.FileField(required=False, use_url=True)
     min_price = serializers.IntegerField()
@@ -35,8 +33,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             "project_category",
             "project_type",
             "project_duration",
-            "project_availability",
             "project_status",
+            "project_progress",
             "file",
             "min_price",
             "max_price",

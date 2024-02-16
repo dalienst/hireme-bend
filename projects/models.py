@@ -46,7 +46,7 @@ class Project(UniversalIdModel, TimeStampedModel):
         ("A", "Available"),
         ("N", "Not Available"),
     )
-    project_availability = models.CharField(
+    project_status = models.CharField(
         max_length=1, choices=PROJECT_STATUS, default="A"
     )
     description = models.TextField()

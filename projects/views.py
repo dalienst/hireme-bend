@@ -82,7 +82,7 @@ def project_type_choices(request):
     return JsonResponse(choices, safe=False)
 
 
-def project_availability_choices(request):
+def project_status_choices(request):
     choices = Project.PROJECT_STATUS
     return JsonResponse(choices, safe=False)
 
