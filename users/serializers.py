@@ -51,9 +51,13 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = (
             "id",
+            "firstname",
+            "lastname",
             "email",
             "username",
             "password",
+            "image",
+            "about",
             "is_verified",
             "is_client",
             "is_admin",
@@ -62,7 +66,10 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
+        user = User.objects.create_user(**validated_data)
+        user.is_client = True
+        user.save()
+        return user
 
 
 class DeveloperSerializer(serializers.ModelSerializer):
