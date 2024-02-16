@@ -34,6 +34,21 @@ class Project(UniversalIdModel, TimeStampedModel):
     project_category = models.CharField(
         max_length=2, choices=PROJECT_CATEGORY, default="WB"
     )
+    PROJECT_PROGRESS = (
+        ("P", "Pending"),
+        ("A", "Active"),
+        ("C", "Completed"),
+    )
+    project_progress = models.CharField(
+        max_length=1, choices=PROJECT_PROGRESS, default="P"
+    )
+    PROJECT_STATUS = (
+        ("A", "Available"),
+        ("N", "Not Available"),
+    )
+    project_availability = models.CharField(
+        max_length=1, choices=PROJECT_STATUS, default="A"
+    )
     description = models.TextField()
     project_duration = models.CharField(max_length=50, blank=True, null=True)
     client = models.ForeignKey(User, on_delete=models.CASCADE, related_name="projects")
