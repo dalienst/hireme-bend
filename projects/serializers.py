@@ -13,11 +13,19 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     name = serializers.CharField(min_length=1)
     description = serializers.CharField(min_length=1)
-    project_category = serializers.CharField(min_length=2)
-    project_type = serializers.CharField(min_length=2)
+    project_category = serializers.CharField(
+        min_length=2, source="get_project_category_display"
+    )
+    project_type = serializers.CharField(
+        min_length=2, source="get_project_type_display"
+    )
     project_duration = serializers.CharField(min_length=2)
-    project_progress = serializers.CharField(min_length=1)
-    project_status = serializers.CharField(min_length=1)
+    project_progress = serializers.CharField(
+        min_length=1, source="get_project_progress_display"
+    )
+    project_status = serializers.CharField(
+        min_length=1, source="get_project_status_display"
+    )
     file = serializers.FileField(required=False, use_url=True)
     min_price = serializers.IntegerField()
     max_price = serializers.IntegerField()
