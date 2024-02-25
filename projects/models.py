@@ -19,36 +19,34 @@ class Project(UniversalIdModel, TimeStampedModel):
 
     name = models.CharField(max_length=1000)
     PROJECT_TYPE = (
-        ("FT", "Full Time"),
-        ("PT", "Part Time"),
-        ("CT", "Contract"),
+        ("Full Time", "Full Time"),
+        ("Part Time", "Part Time"),
+        ("Contract", "Contract"),
     )
-    project_type = models.CharField(max_length=2, choices=PROJECT_TYPE, default="FT")
+    project_type = models.CharField(max_length=200, choices=PROJECT_TYPE, default="FT")
     PROJECT_CATEGORY = (
-        ("WB", "Web Development"),
-        ("DB", "Database"),
-        ("ML", "Machine Learning"),
-        ("AI", "Artificial Intelligence"),
-        ("DS", "Data Science"),
+        ("Web Development", "Web Development"),
+        ("Database", "Database"),
+        ("Machine Learning", "Machine Learning"),
+        ("Artificial Intelligence", "Artificial Intelligence"),
+        ("Data Science", "Data Science"),
     )
     project_category = models.CharField(
-        max_length=2, choices=PROJECT_CATEGORY, default="WB"
+        max_length=255, choices=PROJECT_CATEGORY, default="WB"
     )
     PROJECT_PROGRESS = (
-        ("P", "Pending"),
-        ("A", "Active"),
-        ("C", "Completed"),
+        ("Pending", "Pending"),
+        ("Active", "Active"),
+        ("Completed", "Completed"),
     )
     project_progress = models.CharField(
-        max_length=1, choices=PROJECT_PROGRESS, default="P"
+        max_length=100, choices=PROJECT_PROGRESS, default="P"
     )
     PROJECT_STATUS = (
-        ("A", "Available"),
-        ("N", "Not Available"),
+        ("Available", "Available"),
+        ("Not Available", "Not Available"),
     )
-    project_status = models.CharField(
-        max_length=1, choices=PROJECT_STATUS, default="A"
-    )
+    project_status = models.CharField(max_length=100, choices=PROJECT_STATUS, default="A")
     description = models.TextField()
     project_duration = models.CharField(max_length=50, blank=True, null=True)
     client = models.ForeignKey(User, on_delete=models.CASCADE, related_name="projects")
