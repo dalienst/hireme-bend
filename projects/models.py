@@ -95,12 +95,12 @@ class Bid(UniversalIdModel, TimeStampedModel):
     file = CloudinaryField("proposal", null=True, blank=True)
 
     BID_STATUS = (
-        ("P", "Pending"),
-        ("A", "Accepted"),
-        ("R", "Rejected"),
+        ("Pending", "Pending"),
+        ("Accepted", "Accepted"),
+        ("Rejected", "Rejected"),
     )
 
-    status = models.CharField(max_length=1, choices=BID_STATUS, default="P")
+    status = models.CharField(max_length=100, choices=BID_STATUS, default="P")
     slug = models.SlugField(max_length=400, unique=True, blank=True, null=True)
 
     def clean(self):
