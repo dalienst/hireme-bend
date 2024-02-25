@@ -5,6 +5,7 @@ from projects.views import (
     ProjectDetailView,
     BidDetailView,
     BidListCreateView,
+    ProjectListView,
     project_category_choices,
     project_status_choices,
     project_progress_choices,
@@ -14,6 +15,7 @@ from projects.views import (
 urlpatterns = [
     path("projects/", ProjectListCreateView.as_view(), name="project-list-create"),
     path("projects/<str:slug>/", ProjectDetailView.as_view(), name="project-detail"),
+    path("all-projects/", ProjectListView.as_view(), name="project-list"),
     path("bids/", BidListCreateView.as_view(), name="bid-list-create"),
     path("bids/<str:slug>/", BidDetailView.as_view(), name="bid-detail"),
     path("category/", project_category_choices, name="project-category"),

@@ -44,6 +44,14 @@ class ProjectDetailView(generics.RetrieveUpdateDestroyAPIView):
         return Project.objects.filter(client=self.request.user)
 
 
+class ProjectListView(generics.ListAPIView):
+    serializer_class = ProjectSerializer
+    permission_classes = [
+        IsAuthenticated,
+    ]
+    queryset = Project.objects.all()
+
+
 """
 Bids views
 """
