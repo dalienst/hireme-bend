@@ -19,20 +19,37 @@ class Project(UniversalIdModel, TimeStampedModel):
 
     name = models.CharField(max_length=1000)
     PROJECT_TYPE = (
-        ("FT", "Full Time"),
-        ("PT", "Part Time"),
-        ("CT", "Contract"),
+        ("Full Time", "Full Time"),
+        ("Part Time", "Part Time"),
+        ("Contract", "Contract"),
     )
-    project_type = models.CharField(max_length=2, choices=PROJECT_TYPE, default="FT")
+    project_type = models.CharField(
+        max_length=200, choices=PROJECT_TYPE, default="Full Time"
+    )
     PROJECT_CATEGORY = (
-        ("WB", "Web Development"),
-        ("DB", "Database"),
-        ("ML", "Machine Learning"),
-        ("AI", "Artificial Intelligence"),
-        ("DS", "Data Science"),
+        ("Web Development", "Web Development"),
+        ("Database", "Database"),
+        ("Machine Learning", "Machine Learning"),
+        ("Artificial Intelligence", "Artificial Intelligence"),
+        ("Data Science", "Data Science"),
     )
     project_category = models.CharField(
-        max_length=2, choices=PROJECT_CATEGORY, default="WB"
+        max_length=255, choices=PROJECT_CATEGORY, default="Web Development"
+    )
+    PROJECT_PROGRESS = (
+        ("Pending", "Pending"),
+        ("Active", "Active"),
+        ("Completed", "Completed"),
+    )
+    project_progress = models.CharField(
+        max_length=100, choices=PROJECT_PROGRESS, default="Pending"
+    )
+    PROJECT_STATUS = (
+        ("Available", "Available"),
+        ("Not Available", "Not Available"),
+    )
+    project_status = models.CharField(
+        max_length=100, choices=PROJECT_STATUS, default="Available"
     )
     description = models.TextField()
     project_duration = models.CharField(max_length=50, blank=True, null=True)
@@ -82,13 +99,16 @@ class Bid(UniversalIdModel, TimeStampedModel):
     file = CloudinaryField("proposal", null=True, blank=True)
 
     BID_STATUS = (
-        ("P", "Pending"),
-        ("A", "Accepted"),
-        ("R", "Rejected"),
+        ("Pending", "Pending"),
+        ("Accepted", "Accepted"),
+        ("Rejected", "Rejected"),
     )
 
-    status = models.CharField(max_length=1, choices=BID_STATUS, default="P")
+    status = models.CharField(max_length=100, choices=BID_STATUS, default="Pending")
     slug = models.SlugField(max_length=400, unique=True, blank=True, null=True)
+
+    class Meta:
+        ordering = ["project"]
 
     def clean(self):
         super().clean()

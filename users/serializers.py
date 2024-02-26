@@ -46,14 +46,19 @@ class UserSerializer(serializers.ModelSerializer):
             validate_password_lowercase,
         ],
     )
+    image = serializers.FileField(use_url=True, required=False)
 
     class Meta:
         model = User
         fields = (
             "id",
+            "firstname",
+            "lastname",
             "email",
             "username",
             "password",
+            "image",
+            "about",
             "is_verified",
             "is_client",
             "is_admin",
@@ -62,7 +67,10 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
+        user = User.objects.create_user(**validated_data)
+        user.is_client = True
+        user.save()
+        return user
 
 
 class DeveloperSerializer(serializers.ModelSerializer):
@@ -71,10 +79,6 @@ class DeveloperSerializer(serializers.ModelSerializer):
     Creating developer account
     Verified on creation
     """
-
-    id = serializers.CharField(
-        read_only=True,
-    )
 
     username = serializers.CharField(
         max_length=20,
@@ -102,15 +106,13 @@ class DeveloperSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            "id",
             "email",
+            "firstname",
+            "lastname",
             "username",
             "password",
+            "created_at",
             "is_verified",
-            "is_client",
-            "is_admin",
-            "is_user",
-            "is_developer",
         )
 
     def create(self, validated_data):
