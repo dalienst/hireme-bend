@@ -3,6 +3,8 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from rest_framework.views import APIView
 
 from projects.models import Project, Bid
 from projects.serializers import ProjectSerializer, BidSerializer
@@ -109,3 +111,19 @@ def project_status_choices(request):
 def project_progress_choices(request):
     choices = Project.PROJECT_PROGRESS
     return JsonResponse(choices, safe=False)
+
+
+"""
+Accepting bids
+"""
+
+
+class AcceptBidsView(generics.RetrieveUpdateAPIView):
+    serializer_class = BidSerializer
+    permission_classes = [
+        IsAuthenticated,
+    ]
+    lookup_field = "slug"
+
+    def get_queryset(self):
+        return Bid.objects.filter(project__client=self.request.user)

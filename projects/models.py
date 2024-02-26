@@ -23,7 +23,9 @@ class Project(UniversalIdModel, TimeStampedModel):
         ("Part Time", "Part Time"),
         ("Contract", "Contract"),
     )
-    project_type = models.CharField(max_length=200, choices=PROJECT_TYPE, default="FT")
+    project_type = models.CharField(
+        max_length=200, choices=PROJECT_TYPE, default="Full Time"
+    )
     PROJECT_CATEGORY = (
         ("Web Development", "Web Development"),
         ("Database", "Database"),
@@ -32,7 +34,7 @@ class Project(UniversalIdModel, TimeStampedModel):
         ("Data Science", "Data Science"),
     )
     project_category = models.CharField(
-        max_length=255, choices=PROJECT_CATEGORY, default="WB"
+        max_length=255, choices=PROJECT_CATEGORY, default="Web Development"
     )
     PROJECT_PROGRESS = (
         ("Pending", "Pending"),
@@ -40,13 +42,15 @@ class Project(UniversalIdModel, TimeStampedModel):
         ("Completed", "Completed"),
     )
     project_progress = models.CharField(
-        max_length=100, choices=PROJECT_PROGRESS, default="P"
+        max_length=100, choices=PROJECT_PROGRESS, default="Pending"
     )
     PROJECT_STATUS = (
         ("Available", "Available"),
         ("Not Available", "Not Available"),
     )
-    project_status = models.CharField(max_length=100, choices=PROJECT_STATUS, default="A")
+    project_status = models.CharField(
+        max_length=100, choices=PROJECT_STATUS, default="Available"
+    )
     description = models.TextField()
     project_duration = models.CharField(max_length=50, blank=True, null=True)
     client = models.ForeignKey(User, on_delete=models.CASCADE, related_name="projects")
@@ -100,8 +104,11 @@ class Bid(UniversalIdModel, TimeStampedModel):
         ("Rejected", "Rejected"),
     )
 
-    status = models.CharField(max_length=100, choices=BID_STATUS, default="P")
+    status = models.CharField(max_length=100, choices=BID_STATUS, default="Pending")
     slug = models.SlugField(max_length=400, unique=True, blank=True, null=True)
+
+    class Meta:
+        ordering = ["project"]
 
     def clean(self):
         super().clean()

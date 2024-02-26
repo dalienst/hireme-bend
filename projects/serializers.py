@@ -2,8 +2,39 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from projects.models import Project, Bid
+from users.serializers import DeveloperSerializer
 
 User = get_user_model()
+
+
+class BidSerializer(serializers.ModelSerializer):
+    """
+    Bid serializers
+    """
+
+    project = serializers.SlugRelatedField(
+        queryset=Project.objects.all(), slug_field="slug"
+    )
+    proposal = serializers.CharField(min_length=1)
+    developer = DeveloperSerializer(read_only=True)
+    slug = serializers.SlugField(read_only=True)
+    file = serializers.FileField(required=False, use_url=True)
+
+    class Meta:
+        model = Bid
+        fields = (
+            "id",
+            "project",
+            "proposal",
+            "developer",
+            "slug",
+            "file",
+            "status",
+        )
+
+    def create(self, validated_data):
+        validated_data["developer"] = self.context["request"].user
+        return Bid.objects.create(**validated_data)
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -23,6 +54,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     max_price = serializers.IntegerField()
     client = serializers.CharField(read_only=True, source="client.username")
     slug = serializers.SlugField(read_only=True)
+    bids = BidSerializer(many=True, read_only=True)
 
     class Meta:
         model = Project
@@ -40,37 +72,9 @@ class ProjectSerializer(serializers.ModelSerializer):
             "max_price",
             "client",
             "slug",
+            "bids",
         )
 
     def create(self, validated_data):
         validated_data["client"] = self.context["request"].user
         return Project.objects.create(**validated_data)
-
-
-class BidSerializer(serializers.ModelSerializer):
-    """
-    Bid serializers
-    """
-
-    project = serializers.SlugRelatedField(
-        queryset=Project.objects.all(), slug_field="slug"
-    )
-    proposal = serializers.CharField(min_length=1)
-    developer = serializers.CharField(read_only=True, source="developer.username")
-    slug = serializers.SlugField(read_only=True)
-    file = serializers.FileField(required=False, use_url=True)
-
-    class Meta:
-        model = Bid
-        fields = (
-            "id",
-            "project",
-            "proposal",
-            "developer",
-            "slug",
-            "file",
-        )
-
-    def create(self, validated_data):
-        validated_data["developer"] = self.context["request"].user
-        return Bid.objects.create(**validated_data)

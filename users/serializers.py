@@ -80,10 +80,6 @@ class DeveloperSerializer(serializers.ModelSerializer):
     Verified on creation
     """
 
-    id = serializers.CharField(
-        read_only=True,
-    )
-
     username = serializers.CharField(
         max_length=20,
         min_length=4,
@@ -110,15 +106,13 @@ class DeveloperSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            "id",
             "email",
+            "firstname",
+            "lastname",
             "username",
             "password",
+            "created_at",
             "is_verified",
-            "is_client",
-            "is_admin",
-            "is_user",
-            "is_developer",
         )
 
     def create(self, validated_data):
