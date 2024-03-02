@@ -11,6 +11,7 @@ from users.views import (
     DeveloperListView,
     DeveloperProfileDetailView,
     DeveloperProfileListView,
+    ClientDeveloperProfileView,
     LogoutView,
 )
 
@@ -21,6 +22,11 @@ urlpatterns = [
     # clients
     path("register/client/", UserRegister.as_view(), name="user-create"),
     path("profile/<str:id>/", UserDetailView.as_view(), name="user-detail"),
+    path(
+        "developer/<str:username>/",
+        ClientDeveloperProfileView.as_view(),
+        name="developer-profile",
+    ),
     # developers
     path("register/developer/", DeveloperRegister.as_view(), name="developer-create"),
     path(

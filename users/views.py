@@ -66,6 +66,16 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
         )
 
 
+class ClientDeveloperProfileView(generics.RetrieveAPIView):
+    serializer_class = DeveloperProfileSerializer
+    queryset = DeveloperProfile.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        username = self.kwargs.get("username")
+        return self.get_queryset().get(developer__username=username)
+
+
 """
 Developer Views
 -create developer account
