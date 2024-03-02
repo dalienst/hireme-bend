@@ -130,22 +130,34 @@ class DeveloperProfileSerializer(serializers.ModelSerializer):
 
     developer = serializers.CharField(read_only=True, source="developer.username")
     resume = serializers.FileField(use_url=True, required=False)
-    status = serializers.CharField(min_length=2, allow_blank=True, required=False)
+    role = serializers.CharField(min_length=2, allow_blank=True, required=False)
     skills = serializers.CharField(min_length=1, allow_blank=True, required=False)
+    github = serializers.URLField(allow_blank=True, required=False)
+    instagram = serializers.URLField(allow_blank=True, required=False)
+    twitter = serializers.URLField(allow_blank=True, required=False)
+    linkedin = serializers.URLField(allow_blank=True, required=False)
 
     class Meta:
         model = DeveloperProfile
         fields = (
             "developer",
             "resume",
-            "status",
+            "role",
             "skills",
+            "github",
+            "twitter",
+            "linkedin",
+            "instagram",
         )
 
     def update(self, instance, validated_data):
         instance.resume = validated_data.get("resume", instance.resume)
-        instance.status = validated_data.get("status", instance.status)
+        instance.role = validated_data.get("role", instance.role)
         instance.skills = validated_data.get("skills", instance.skills)
+        instance.github = validated_data.get("github", instance.github)
+        instance.twitter = validated_data.get("twitter", instance.twitter)
+        instance.linkedin = validated_data.get("linkedin", instance.linkedin)
+        instance.instagram = validated_data.get("instagram", instance.instagram)
         instance.save()
         return instance
 

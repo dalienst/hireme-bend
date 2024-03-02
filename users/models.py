@@ -31,7 +31,7 @@ class UserManager(BaseUserManager):
         kwargs.setdefault("is_staff", False)
         kwargs.setdefault("is_superuser", False)
         return self._create_user(username, email, password, **kwargs)
-    
+
     # def create_developer(self, username: str, email: str, password: str, **kwargs):
     #     kwargs.setdefault("is_staff", False)
     #     kwargs.setdefault("is_superuser", False)
@@ -122,16 +122,20 @@ class DeveloperProfile(UniversalIdModel):
     developer = models.OneToOneField(User, on_delete=models.CASCADE)
     resume = CloudinaryField("resume", null=True, blank=True)
     skills = models.TextField(blank=True, null=True)
+    instagram = models.URLField(blank=True, null=True)
+    github = models.URLField(blank=True, null=True)
+    twitter = models.URLField(blank=True, null=True)
+    linkedin = models.URLField(blank=True, null=True)
 
-    DEVELOPER_STATUS = (
+    DEVELOPER_ROLE = (
         ("SD", "Software Developer"),
         ("ML", "Machine Learning Engineer"),
         ("SE", "Software Engineer"),
     )
 
-    status = models.CharField(
+    role = models.CharField(
         max_length=2,
-        choices=DEVELOPER_STATUS,
+        choices=DEVELOPER_ROLE,
         default="SD",
     )
 
