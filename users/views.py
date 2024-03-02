@@ -110,7 +110,10 @@ class DeveloperProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DeveloperProfileSerializer
     lookup_field = "developer"
     queryset = DeveloperProfile.objects.all()
-    permission_classes = [IsAuthenticated, IsDeveloper]
+    permission_classes = [
+        IsAuthenticated,
+        IsDeveloper,
+    ]
 
 
 class DeveloperProfileListView(generics.ListAPIView):

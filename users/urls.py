@@ -23,7 +23,7 @@ urlpatterns = [
     path("register/client/", UserRegister.as_view(), name="user-create"),
     path("profile/<str:id>/", UserDetailView.as_view(), name="user-detail"),
     path(
-        "developer/<str:username>/",
+        "developers/<str:username>/",
         ClientDeveloperProfileView.as_view(),
         name="developer-profile",
     ),
