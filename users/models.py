@@ -126,18 +126,8 @@ class DeveloperProfile(UniversalIdModel):
     github = models.URLField(blank=True, null=True)
     twitter = models.URLField(blank=True, null=True)
     linkedin = models.URLField(blank=True, null=True)
-
-    DEVELOPER_ROLE = (
-        ("SD", "Software Developer"),
-        ("ML", "Machine Learning Engineer"),
-        ("SE", "Software Engineer"),
-    )
-
-    role = models.CharField(
-        max_length=2,
-        choices=DEVELOPER_ROLE,
-        default="SD",
-    )
+    website = models.URLField(blank=True, null=True)
+    role = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self) -> str:
         return self.employee.username

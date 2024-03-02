@@ -106,6 +106,7 @@ class DeveloperSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
+            "id",
             "email",
             "firstname",
             "lastname",
@@ -136,6 +137,7 @@ class DeveloperProfileSerializer(serializers.ModelSerializer):
     instagram = serializers.URLField(allow_blank=True, required=False)
     twitter = serializers.URLField(allow_blank=True, required=False)
     linkedin = serializers.URLField(allow_blank=True, required=False)
+    website = serializers.URLField(allow_blank=True, required=False)
 
     class Meta:
         model = DeveloperProfile
@@ -148,6 +150,7 @@ class DeveloperProfileSerializer(serializers.ModelSerializer):
             "twitter",
             "linkedin",
             "instagram",
+            "website",
         )
 
     def update(self, instance, validated_data):
@@ -158,6 +161,7 @@ class DeveloperProfileSerializer(serializers.ModelSerializer):
         instance.twitter = validated_data.get("twitter", instance.twitter)
         instance.linkedin = validated_data.get("linkedin", instance.linkedin)
         instance.instagram = validated_data.get("instagram", instance.instagram)
+        instance.website = validated_data.get("website", instance.website)
         instance.save()
         return instance
 
