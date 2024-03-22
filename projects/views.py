@@ -54,6 +54,16 @@ class ProjectListView(generics.ListAPIView):
     queryset = Project.objects.filter(project_status="Available")
 
 
+class TenProjectListView(generics.ListAPIView):
+    serializer_class = ProjectSerializer
+    permission_classes = [
+        IsAuthenticated,
+    ]
+
+    def get_queryset(self):
+        return Project.objects.filter(client=self.request.user)[:10]
+
+
 class ProjectsRetrieveView(generics.RetrieveAPIView):
     serializer_class = ProjectSerializer
     permission_classes = [
