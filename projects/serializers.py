@@ -54,7 +54,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     max_price = serializers.IntegerField()
     client = serializers.CharField(read_only=True, source="client.username")
     slug = serializers.SlugField(read_only=True)
-    bids = BidSerializer(many=True, read_only=True)
+    bids = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Project
@@ -78,3 +78,8 @@ class ProjectSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data["client"] = self.context["request"].user
         return Project.objects.create(**validated_data)
+
+    def get_bids(self, obj):
+        bids = Bid.objects.filter(project=obj)
+        serializer = BidSerializer(bids, many=True)
+        return serializer.data

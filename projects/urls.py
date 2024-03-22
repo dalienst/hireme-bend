@@ -12,6 +12,7 @@ from projects.views import (
     project_status_choices,
     project_progress_choices,
     project_type_choices,
+    TenProjectListView
 )
 
 urlpatterns = [
@@ -30,4 +31,5 @@ urlpatterns = [
     path("type/", project_type_choices, name="project-type"),
     path("status/", project_status_choices, name="project-status"),
     path("progress/", project_progress_choices, name="project-progress"),
+    path("ten-projects/", TenProjectListView.as_view(), name="ten-projects"),
 ]
