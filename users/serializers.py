@@ -2,6 +2,11 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
 from users.models import DeveloperProfile
 from users.validators import (
@@ -10,6 +15,8 @@ from users.validators import (
     validate_password_lowercase,
     validate_password_symbol,
 )
+from users.token import account_activation_token
+from hireadeveloper.settings.base import EMAIL_USER
 
 User = get_user_model()
 
@@ -66,9 +73,65 @@ class UserSerializer(serializers.ModelSerializer):
             "is_developer",
         )
 
+    @staticmethod
+    def send_activation_email(user, request):
+        """
+        send verification email
+        """
+        current_site = get_current_site(request)
+        email_body = render_to_string(
+            "email_verification.html",
+            {
+                "user": user,
+                "domain": current_site.domain,
+                "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                "token": account_activation_token.make_token(user),
+            },
+        )
+
+        send_mail(
+            "Activate your account",
+            email_body,
+            EMAIL_USER,
+            [user.email],
+            fail_silently=False,
+        )
+
     def create(self, validated_data):
+        request = self.context.get("request")
         user = User.objects.create_user(**validated_data)
         user.is_client = True
+        user.save()
+        self.send_activation_email(user, request)
+        return user
+
+
+class VerifyEmailSerializer(serializers.Serializer):
+    uidb64 = serializers.CharField()
+    token = serializers.CharField()
+
+    class Meta:
+        fields = ("uidb64", "token")
+
+    def validate(self, data):
+        user = None
+        try:
+            user_id = force_str(urlsafe_base64_decode(data.get("uidb64")))
+            user = User.objects.get(id=user_id)
+
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            raise serializers.ValidationError("Invalid user id", code="invalid_code")
+
+        token = data.get("token")
+        if user and not account_activation_token.check_token(user, token):
+            raise serializers.ValidationError("Invalid token", code="invalid_token")
+
+        return data
+
+    def save(self, **kwargs):
+        user_id = force_str(urlsafe_base64_decode(self.validated_data.get("uidb64")))
+        user = User.objects.get(id=user_id)
+        user.is_verified = True
         user.save()
         return user
 

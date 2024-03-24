@@ -13,6 +13,7 @@ from users.views import (
     DeveloperProfileListView,
     ClientDeveloperProfileView,
     LogoutView,
+    VerifyEmailView
 )
 
 urlpatterns = [
@@ -27,6 +28,7 @@ urlpatterns = [
         ClientDeveloperProfileView.as_view(),
         name="developer-profile",
     ),
+    path("verify-email/<str:uidb64>/<str:token>/", VerifyEmailView.as_view(), name="verify-email"),
     # developers
     path("register/developer/", DeveloperRegister.as_view(), name="developer-create"),
     path(

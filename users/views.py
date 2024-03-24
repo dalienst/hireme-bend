@@ -13,6 +13,7 @@ from users.serializers import (
     DeveloperProfileSerializer,
     DeveloperSerializer,
     LogoutSerializer,
+    VerifyEmailSerializer,
 )
 from users.permissions import IsUser, IsDeveloper
 
@@ -69,7 +70,7 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
 class ClientDeveloperProfileView(generics.RetrieveAPIView):
     serializer_class = DeveloperProfileSerializer
     queryset = DeveloperProfile.objects.all()
-    lookup_field="developer"
+    lookup_field = "developer"
     permission_classes = [
         IsAuthenticated,
     ]
@@ -77,6 +78,27 @@ class ClientDeveloperProfileView(generics.RetrieveAPIView):
     # def get_object(self):
     #     username = self.kwargs.get("username")
     #     return self.get_queryset().get(developer__username=username)
+
+
+"""
+Verify email
+"""
+
+
+class VerifyEmailView(GenericAPIView):
+    serializer_class = VerifyEmailSerializer
+
+    def patch(self, request, uidb64, token, **kwargs):
+        data = {"uidb64": uidb64, "token": token}
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        return Response(
+            {
+                "message": "Email verified successfully",
+            },
+            status=status.HTTP_200_OK,
+        )
 
 
 """
