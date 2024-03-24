@@ -16,7 +16,7 @@ from users.validators import (
     validate_password_symbol,
 )
 from users.token import account_activation_token
-from hireadeveloper.settings.base import EMAIL_USER
+from hireadeveloper.settings.base import EMAIL_USER, DOMAIN
 
 User = get_user_model()
 
@@ -83,7 +83,7 @@ class UserSerializer(serializers.ModelSerializer):
             "email_verification.html",
             {
                 "user": user,
-                "domain": current_site.domain,
+                "domain": DOMAIN,
                 "uid": urlsafe_base64_encode(force_bytes(user.pk)),
                 "token": account_activation_token.make_token(user),
             },

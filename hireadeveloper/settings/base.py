@@ -197,8 +197,8 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 # sendgrid settings
 EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = config("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+EMAIL_HOST_USER = "meritmebusiness@gmail.com"
+EMAIL_HOST_PASSWORD = "xryo xzge qoed tafm"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USER = config("EMAIL_USER", "")
@@ -208,3 +208,5 @@ cloudinary.config(
     api_key=config("CLOUDINARY_API_KEY"),
     api_secret=config("CLOUDINARY_API_SECRET"),
 )
+
+DOMAIN = config("DOMAIN", "")
