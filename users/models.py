@@ -130,4 +130,4 @@ class DeveloperProfile(UniversalIdModel):
     role = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self) -> str:
-        return self.employee.username
+        return self.developer.username

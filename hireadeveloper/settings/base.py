@@ -193,10 +193,12 @@ SIMPLE_JWT = {
     "UPDATE_LAST_LOGIN": False,
 }
 
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
 # sendgrid settings
-EMAIL_HOST = "smtp.sendgrid.net"
-EMAIL_HOST_USER = "apikey"
-EMAIL_HOST_PASSWORD = config("SENDGRID_API_KEY", "")
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = "abdallah.mu.sa254@gmail.com"
+EMAIL_HOST_PASSWORD = "mgbr uhpp fhks afgz"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USER = config("EMAIL_USER", "")
@@ -206,3 +208,5 @@ cloudinary.config(
     api_key=config("CLOUDINARY_API_KEY"),
     api_secret=config("CLOUDINARY_API_SECRET"),
 )
+
+DOMAIN = config("DOMAIN")
